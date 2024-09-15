@@ -48,7 +48,7 @@ export default function BarChartCheckIns({sx }) {
   return (
     <Card sx={sx}>
       <CardContent>
-        <Chart height={350} options={chartOptions} series={chartSeries} type="bar" width="100%" />
+        <Chart height={250} options={chartOptions} series={chartSeries} type="bar" width="100%" />
       </CardContent>
       <Divider />
     </Card>
