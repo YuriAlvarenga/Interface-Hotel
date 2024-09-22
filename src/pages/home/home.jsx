@@ -8,6 +8,7 @@ import { useSelector } from 'react-redux'
 import ChamadosAbertos from '../../components/chamados/chamados-abertos'
 import OpenManualTicket from '../../components/open-manual-ticket/open-manual-ticket'
 import DashboardCard from '../../components/briefing/briefing'
+import Management from '../../components/management/management'
 
 
 let theme = createTheme({
@@ -65,14 +66,18 @@ export default function MenuHome() {
   const itemName = useSelector((state) => state.menu.itemName)
   const renderBasedOnItemName = () => {
     switch (itemName) {
+      case 'Departamentos':
+        return <Management/>
       case 'Recepção':
       case 'Governança':
       case 'Restaurante':
       case 'Room Service':
       case 'Manutenção':
         return <ChamadosAbertos />
+      case 'Relatórios':
+        return <DashboardCard/>
       default:
-        return <DashboardCard />
+        return ''
     }
   }
 

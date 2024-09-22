@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import Divider from '@mui/material/Divider'
 import Drawer from '@mui/material/Drawer'
 import List from '@mui/material/List'
@@ -7,40 +7,12 @@ import ListItem from '@mui/material/ListItem'
 import ListItemButton from '@mui/material/ListItemButton'
 import ListItemIcon from '@mui/material/ListItemIcon'
 import ListItemText from '@mui/material/ListItemText'
-import NotificationsActiveIcon from '@mui/icons-material/NotificationsActive'
-import NotificationImportantIcon from '@mui/icons-material/NotificationImportant'
-import NotificationsPausedIcon from '@mui/icons-material/NotificationsPaused'
 import ViewInArIcon from '@mui/icons-material/ViewInAr'
 import HomeIcon from '@mui/icons-material/Home'
-import FolderSharedIcon from '@mui/icons-material/FolderShared'
-import AssessmentIcon from '@mui/icons-material/Assessment'
 import { Typography } from '@mui/material'
-import { useDispatch } from 'react-redux'
 import { setItemName, setSelectedTabLabel } from '../../redux/slice/menuSlice'
-
-
-
-
-// ícones e nomes que estão no menu lateral
-const categories = [
-  {
-    name: 'Setores',
-    children: [
-      { id: 1, name: 'Recepção', icon: <NotificationsActiveIcon style={{ fontSize: 16 }} /> },
-      { id: 2, name: 'Governança', icon: <NotificationImportantIcon style={{ fontSize: 16 }} /> },
-      { id: 3, name: 'Restaurante', icon: <NotificationsPausedIcon style={{ fontSize: 16 }} /> },
-      { id: 4, name: 'Room Service', icon: <NotificationsPausedIcon style={{ fontSize: 16 }} /> },
-      { id: 5, name: 'Manutenção', icon: <NotificationsPausedIcon style={{ fontSize: 16 }} /> },
-    ],
-  },
-  {
-    name: 'Manutenção de Contas',
-    children: [
-      { id: 6, name: 'Contas', icon: <FolderSharedIcon style={{ fontSize: 16 }} /> },
-      { id: 7, name: 'Relatórios', icon: <AssessmentIcon style={{ fontSize: 16 }} /> },
-    ],
-  },
-]
+import { useDispatch, useSelector } from 'react-redux'
+import { fetchDepartments } from '../../redux/slice/departmentSlice'
 
 
 
@@ -48,6 +20,11 @@ export default function MenuLateral() { //handleclick e togglemenuauxiliar  est�
 
   const dispatch = useDispatch()
   const [activeItem, setActiveItem] = useState(0)
+  const { departments } = useSelector((state) => state.departments)
+
+  useEffect(() => {
+    dispatch(fetchDepartments())
+  }, [dispatch])
 
   const handleDashboardClick = () => {
     dispatch(setItemName('Home'))
@@ -60,6 +37,34 @@ export default function MenuLateral() { //handleclick e togglemenuauxiliar  est�
     dispatch(setSelectedTabLabel(''))
     setActiveItem(id)
   }
+
+
+  // ícones e nomes que estão no menu lateral
+  const categories = [
+    {
+      name: 'Gerenciamento',
+      children: [
+        { id: 101, name: 'Departamentos' },
+        { id: 102, name: 'Escala' }
+      ]
+    },
+    ...(departments.length > 0
+      ? [{
+          name: 'Setores',
+          children: departments.map(department => ({
+            id: department.id,
+            name: department.name,
+          }))
+        }]
+      : []),
+    {
+      name: 'Manutenção de Contas',
+      children: [
+        { id: 201, name: 'Contas' },
+        { id: 202, name: 'Relatórios' },
+      ],
+    },
+  ]
 
   return (
     <Drawer variant="permanent" sx={{ background: '#101F33', }}>
@@ -85,8 +90,11 @@ export default function MenuLateral() { //handleclick e togglemenuauxiliar  est�
 
         {categories.map(({ name, children }) => (
           <Box key={name} sx={{ bgcolor: '#101F33' }}>
-            <ListItem sx={{ p: 2 }}>
-              <ListItemText sx={{ color: '#fff' }}>{name}</ListItemText>
+            <ListItem sx={{ p: 2, pb:0 }}>
+              <ListItemText
+                sx={{ color: '#fff' }}
+                primary={<Typography sx={{ fontSize: '1rem' }}>{name}</Typography>}
+              />
             </ListItem>
             {children.map(({ id, name: childName, icon }) => (
               <ListItem disablePadding key={childName}>

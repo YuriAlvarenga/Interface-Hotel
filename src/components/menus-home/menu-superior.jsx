@@ -2,10 +2,11 @@ import React, { useState, useEffect } from 'react'
 import AppBar from '@mui/material/AppBar'
 import Grid from '@mui/material/Grid'
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth'
-import IconButton from '@mui/material/IconButton'
 import MenuIcon from '@mui/icons-material/Menu'
 import Toolbar from '@mui/material/Toolbar'
 import Typography from '@mui/material/Typography'
+import Tooltip from '@mui/material/Tooltip'
+import IconButton from '@mui/material/IconButton'
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline'
 import CloseIcon from '@mui/icons-material/Close'
 import Tabs from '@mui/material/Tabs'
@@ -94,12 +95,12 @@ export default function MenuSuperior({ handleClick, newTicket }) { // propriedad
         <Toolbar>
           <Grid container alignItems="center" spacing={1}>
             <Grid item xs>
-              {itemName && !["Home", "Contas", "Novo Chamado"].includes(itemName) && (
+              {itemName && !["Home", "Departamentos", "Escala", "Contas", "Novo Chamado"].includes(itemName) && (
                 <Tabs value={value !== null ? value : false} onChange={handleChange}>
                   {tabs.map((tab) => (
                     <Tab
                       key={tab.key}
-                      sx={{ textTransform: 'none', '&.Mui-selected': { color: '#FFF' } }}
+                      sx={{ textTransform: 'none', color: '#606060', '&.Mui-selected': { color: '#FFF' } }}
                       value={tab.value}
                       label={tab.label}
                     />
@@ -120,9 +121,11 @@ export default function MenuSuperior({ handleClick, newTicket }) { // propriedad
                   </React.Fragment>
                 ) : (
                   <React.Fragment>
-                    <IconButton color="inherit">
-                      <AddCircleOutlineIcon style={{ fontSize: 18 }} />
-                    </IconButton>
+                    <Tooltip title="Editar Departamento">
+                      <IconButton color='inherit'>
+                        <AddCircleOutlineIcon style={{ fontSize: 18 }} />
+                      </IconButton>
+                    </Tooltip>
                     <Typography sx={{ fontSize: 14 }}>
                       Novo Chamado
                     </Typography>
